@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import {
   McpServer,
   ResourceTemplate,
@@ -18,7 +20,7 @@ server.tool(
     url: z
       .string()
       .describe(
-        "YApi分类页面URL，格式如：https://ertccc.com/project/810/interface/api/cat_2783"
+        "YApi分类页面URL，格式如：https://xxxxx.com/project/810/interface/api/cat_2783"
       ),
   },
   async ({ url }) => {
@@ -32,7 +34,7 @@ server.tool(
           content: [
             {
               type: "text",
-              text: "❌ URL格式错误，请提供正确的YApi分类页面URL，格式如：https://ertccc.com/project/810/interface/api/cat_2783",
+              text: "❌ URL格式错误，请提供正确的YApi分类页面URL，格式如：https://xxxxx.com/project/810/interface/api/cat_2783",
             },
           ],
         };
@@ -41,7 +43,7 @@ server.tool(
       const catId = match[1];
 
       // 2. 构建API请求URL
-      const apiUrl = `https://ertccc.com/api/interface/list_cat?page=1&limit=20&catid=${catId}`;
+      const apiUrl = `${process.env.BASE_URL}/api/interface/list_cat?page=1&limit=20&catid=${catId}`;
 
       // 3. 准备请求头
       const headers: Record<string, string> = {
@@ -104,7 +106,7 @@ server.tool(
           result += `${index + 1}. **${item.title}**\n`;
           result += `   • ID: \`${item._id}\` (用于获取详情)\n`;
           result += `   • 路径: ${item.method.toUpperCase()} ${item.path}\n`;
-          result += `   • 链接: https://ertccc.com/project/810/interface/api/${item._id}\n\n`;
+          result += `   • 链接: ${process.env.BASE_URL}/project/810/interface/api/${item._id}\n\n`;
         });
       }
 
@@ -134,9 +136,9 @@ server.tool(
     baseUrl: z
       .string()
       .optional()
-      .describe("YApi基础URL，默认为 https://ertccc.com"),
+      .describe("YApi基础URL，默认为 https://xxx.com"),
   },
-  async ({ id, baseUrl = "https://ertccc.com" }) => {
+  async ({ id, baseUrl = process.env.BASE_URL }) => {
     try {
       // 1. 构建详情API请求URL
       const apiUrl = `${baseUrl}/api/interface/get?id=${id}`;
@@ -253,7 +255,7 @@ server.resource(
     list: undefined,
   }),
   async (uri, { catId }) => {
-    const apiUrl = `https://ertccc.com/api/interface/list_cat?page=1&limit=20&catid=${catId}`;
+    const apiUrl = `${process.env.BASE_URL}/api/interface/list_cat?page=1&limit=20&catid=${catId}`;
 
     try {
       const response = await fetch(apiUrl);

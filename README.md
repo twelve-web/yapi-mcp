@@ -36,17 +36,16 @@ YAPI_COOKIE="_yapi_token=your_token_here; _yapi_uid=your_uid_here"
 
 ## 🎯 在 MCP 客户端中使用
 
-### Claude Desktop 配置
-
 在 `~/Library/Application Support/Claude/claude_desktop_config.json` 中添加：
 
 ```json
 {
   "mcpServers": {
     "auto-api-mcp": {
-      "command": "auto-api",
+      "command": "npx",
       "env": {
-        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid"
+        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid",
+        "BASE_URL": "xxxxx"
       }
     }
   }
@@ -69,13 +68,13 @@ auto-api
 
 **参数:**
 
-- `url` (string): YApi 分类页面 URL，格式如 `https://ertccc.com/project/810/interface/api/cat_2783`
+- `url` (string): YApi 分类页面 URL，格式如 `https://xxxxx.com/project/810/interface/api/cat_2783`
 
 **示例:**
 
 ```
 工具: yapi_get_interfaces
-参数: url = "https://ertccc.com/project/810/interface/api/cat_2783"
+参数: url = "https://xxxxx.com/project/810/interface/api/cat_2783"
 ```
 
 ### 2. yapi_get_interface_detail
@@ -85,7 +84,7 @@ auto-api
 **参数:**
 
 - `id` (string): 接口 ID，来自接口列表中的 `_id` 字段
-- `baseUrl` (string, 可选): YApi 基础 URL，默认为 `https://ertccc.com`
+- `baseUrl` (string, 可选): YApi 基础 URL，默认为 `https://fxxxxx.com`
 
 **示例:**
 
