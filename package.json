@@ -1,0 +1,46 @@
+{
+  "name": "auto-api-mcp",
+  "version": "1.0.0",
+  "description": "Auto API - YApi接口信息获取工具，支持MCP协议",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "auto-api": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('dist/index.js', '755')\"",
+    "start": "node dist/index.js",
+    "dev": "npm run build && npm start"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "mcp",
+    "yapi",
+    "api",
+    "model-context-protocol",
+    "interface",
+    "documentation"
+  ],
+  "author": "twelve-web <twelve1997@126.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twelve-web/auto-api-mcp.git"
+  },
+  "homepage": "https://github.com/twelve-web/auto-api-mcp#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "dotenv": "^16.5.0",
+    "zod": "^3.25.41"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
