@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { McpServer, ResourceTemplate, } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { McpServer, ResourceTemplate, } from "@modelcontextprotocol/sdk/server/mcp";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
 import { z } from "zod";
 const server = new McpServer({
     name: "auto-api",
