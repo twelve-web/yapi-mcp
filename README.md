@@ -36,16 +36,33 @@ YAPI_COOKIE="_yapi_token=your_token_here; _yapi_uid=your_uid_here"
 
 ## 🎯 在 MCP 客户端中使用
 
+### Claude Desktop 配置
+
 在 `~/Library/Application Support/Claude/claude_desktop_config.json` 中添加：
 
 ```json
 {
   "mcpServers": {
     "auto-api-mcp": {
-      "command": "npx",
+      "command": "auto-api-mcp",
       "env": {
-        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid",
-        "BASE_URL": "xxxxx"
+        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid"
+      }
+    }
+  }
+}
+```
+
+### 使用 npx（推荐，无需安装）
+
+```json
+{
+  "mcpServers": {
+    "auto-api-mcp": {
+      "command": "npx",
+      "args": ["--yes", "auto-api-mcp"],
+      "env": {
+        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid"
       }
     }
   }
@@ -57,7 +74,7 @@ YAPI_COOKIE="_yapi_token=your_token_here; _yapi_uid=your_uid_here"
 使用标准的 MCP 连接方式：
 
 ```bash
-auto-api
+auto-api-mcp
 ```
 
 ## 🛠️ 可用工具

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import { McpServer, ResourceTemplate, } from "@modelcontextprotocol/sdk/server/mcp";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
+import { McpServer, ResourceTemplate, } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 const server = new McpServer({
-    name: "auto-api",
+    name: "auto-api-mcp",
     version: "1.0.0",
     description: "Auto API - YApi接口信息获取工具",
 });
