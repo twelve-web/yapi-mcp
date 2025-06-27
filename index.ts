@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 
-import {
-  McpServer,
-  ResourceTemplate,
-} from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
@@ -20,11 +17,23 @@ server.tool(
     url: z
       .string()
       .describe(
-        "YApi分类页面URL，格式如：https://xxxxx.com/project/810/interface/api/cat_2783"
+        "YApi分类页面URL，格式如：https://xxxxx.com/project/810/interface/api/cat_2783，用于获取该分类下的所有接口列表，需要拿到ID通过调用yapi_get_interface_detail获取接口详情。"
       ),
   },
   async ({ url }) => {
     try {
+      // 参数验证
+      if (!url || typeof url !== "string") {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "❌ 参数错误：缺少有效的URL参数" + url,
+            },
+          ],
+        };
+      }
+
       // 1. 解析URL提取分类ID
       const urlPattern = /\/cat_(\d+)$/;
       const match = url.match(urlPattern);
@@ -43,30 +52,10 @@ server.tool(
       const catId = match[1];
 
       // 2. 构建API请求URL
-      const apiUrl = `${process.env.BASE_URL}/api/interface/list_cat?page=1&limit=20&catid=${catId}`;
-
-      // 3. 准备请求头
-      const headers: Record<string, string> = {
-        cookie: process.env.YAPI_COOKIE || "",
-        accept: "application/json, text/plain, */*",
-        "accept-encoding": "gzip, deflate, br, zstd",
-        "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-        referer: url,
-        "sec-ch-ua":
-          '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": '"macOS"',
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "user-agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
-      };
-
-      // 4. 发起请求
+      const apiUrl = `${process.env.BASE_URL}/api/interface/list_cat?token=${process.env.YAPI_TOKEN}&catid=${catId}&page=1&limit=100`;
+      // 3. 发起请求
       const response = await fetch(apiUrl, {
         method: "GET",
-        headers,
       });
 
       if (!response.ok) {
@@ -81,7 +70,6 @@ server.tool(
       }
 
       const data = await response.json();
-
       // 5. 格式化返回结果
       if (data.errcode !== 0) {
         return {
@@ -132,39 +120,32 @@ server.tool(
 server.tool(
   "yapi_get_interface_detail",
   {
-    id: z.string().describe("接口ID，来自接口列表中的_id字段"),
-    baseUrl: z
+    id: z
       .string()
-      .optional()
-      .describe("YApi基础URL，默认为 https://xxx.com"),
+      .describe(
+        "接口ID，来自接口列表中的_id字段，或者来自直接传入的id用于获取该接口的详情。"
+      ),
   },
-  async ({ id, baseUrl = process.env.BASE_URL }) => {
+  async ({ id }) => {
     try {
-      // 1. 构建详情API请求URL
-      const apiUrl = `${baseUrl}/api/interface/get?id=${id}`;
+      // 参数验证
+      if (!id || typeof id !== "string") {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "❌ 参数错误：缺少有效的ID参数",
+            },
+          ],
+        };
+      }
 
-      // 2. 准备请求头
-      const headers: Record<string, string> = {
-        cookie: process.env.YAPI_COOKIE || "",
-        accept: "application/json, text/plain, */*",
-        "accept-encoding": "gzip, deflate, br, zstd",
-        "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-        referer: `${baseUrl}/project/810/interface/api/${id}`,
-        "sec-ch-ua":
-          '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": '"macOS"',
-        "sec-fetch-dest": "empty",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-origin",
-        "user-agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
-      };
+      // 1. 构建详情API请求URL
+      const apiUrl = `${process.env.BASE_URL}/api/interface/get?token=${process.env.YAPI_TOKEN}&id=${id}`;
 
       // 3. 发起请求
       const response = await fetch(apiUrl, {
         method: "GET",
-        headers,
       });
 
       if (!response.ok) {
@@ -224,11 +205,18 @@ server.tool(
         result += `## 📥 响应体 (res_body)\n`;
         result += `暂无响应体数据\n\n`;
       }
+      if (interfaceData.method) {
+        result += `## 📥 请求方法 (method)\n`;
+        result += `\`\`\`${interfaceData.method}\n\`\`\`\n\n`;
+      } else {
+        result += `## 📥 请求方法 (method)\n`;
+        result += `暂无请求方法数据\n\n`;
+      }
 
       // 接口链接
       result += `## 🔗 相关链接\n`;
-      result += `- **在线文档**: ${baseUrl}/project/810/interface/api/${interfaceData._id}\n`;
-      result += `- **Mock地址**: ${baseUrl}/mock/810${interfaceData.path}\n`;
+      result += `- **在线文档**: ${process.env.BASE_URL}/project/810/interface/api/${interfaceData._id}\n`;
+      result += `- **Mock地址**: ${process.env.BASE_URL}/mock/810${interfaceData.path}\n`;
 
       return {
         content: [{ type: "text", text: result }],
@@ -247,43 +235,6 @@ server.tool(
     }
   }
 );
-
-// Add a dynamic yapi resource
-server.resource(
-  "yapi",
-  new ResourceTemplate("yapi://cat/{catId}", {
-    list: undefined,
-  }),
-  async (uri, { catId }) => {
-    const apiUrl = `${process.env.BASE_URL}/api/interface/list_cat?page=1&limit=20&catid=${catId}`;
-
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-
-      return {
-        contents: [
-          {
-            uri: uri.href,
-            mimeType: "application/json",
-            text: JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    } catch (error) {
-      return {
-        contents: [
-          {
-            uri: uri.href,
-            mimeType: "text/plain",
-            text: `获取接口列表失败: ${error}`,
-          },
-        ],
-      };
-    }
-  }
-);
-
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
 await server.connect(transport);

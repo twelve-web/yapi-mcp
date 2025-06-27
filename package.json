@@ -1,6 +1,6 @@
 {
   "name": "auto-api-mcp",
-  "version": "1.0.6",
+  "version": "1.0.13",
   "description": "Auto API - YApi接口信息获取工具，支持MCP协议",
   "main": "dist/index.js",
   "type": "module",
