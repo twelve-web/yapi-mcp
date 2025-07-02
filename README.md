@@ -1,4 +1,4 @@
-# Auto API - YApi MCP 服务
+# YApi MCP 服务
 
 > 一个基于 Model Context Protocol (MCP) 的 YApi 接口信息获取工具
 
@@ -9,19 +9,11 @@
 - 🔧 **环境变量支持**: 支持通过环境变量配置认证信息
 - 🛡️ **错误处理**: 完善的错误处理和用户友好的错误提示
 
-## 📦 安装
-
-### NPM 安装
+## 本地开发
 
 ```bash
-npm install -g auto-api-mcp
-```
-
-### 本地开发
-
-```bash
-git clone https://github.com/twelve-web/auto-api-mcp.git
-cd auto-api-mcp
+git clone https://github.com/twelve-web/yapi-mcp.git
+cd yapi-mcp
 npm install
 npm run build
 ```
@@ -31,51 +23,40 @@ npm run build
 创建 `.env` 文件并添加 YApi 认证信息（可选）：
 
 ```env
-YAPI_COOKIE="_yapi_token=your_token_here; _yapi_uid=your_uid_here"
+YAPI_TOKEN=""
+BASE_URL=""
 ```
+
+## 版本
+
+node>18
+npm 官方源
 
 ## 🎯 在 MCP 客户端中使用
 
-### Claude Desktop 配置
+### Cursor Desktop 配置
 
-在 `~/Library/Application Support/Claude/claude_desktop_config.json` 中添加：
-
-```json
-{
-  "mcpServers": {
-    "auto-api-mcp": {
-      "command": "auto-api-mcp",
-      "env": {
-        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid"
-      }
-    }
-  }
-}
-```
-
-### 使用 npx（推荐，无需安装）
+在 mcp.json 中添加：
 
 ```json
 {
   "mcpServers": {
-    "auto-api-mcp": {
+    "Ypai-MCP": {
       "command": "npx",
-      "args": ["--yes", "auto-api-mcp"],
+      "args": ["-y", "yapi-mcp"],
       "env": {
-        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid"
+        "YAPI_TOKEN": "aa270a5a35f043540xxxxxxx5c908164f6fcae",
+        "BASE_URL": "https://fed.xxxx.com"
       }
     }
   }
 }
 ```
 
-### 其他 MCP 客户端
+## 📸 参数获取方式
 
-使用标准的 MCP 连接方式：
-
-```bash
-auto-api-mcp
-```
+![yapi-mcp 参数获取方式](http://static.markweb.top/static/mcp-1.jpg)
+![yapi-mcp 参数获取方式](http://static.markweb.top/static/mcp-2.jpg)
 
 ## 🛠️ 可用工具
 
@@ -101,21 +82,20 @@ auto-api-mcp
 **参数:**
 
 - `id` (string): 接口 ID，来自接口列表中的 `_id` 字段
-- `baseUrl` (string, 可选): YApi 基础 URL，默认为 `https://fxxxxx.com`
 
 **示例:**
 
 ```
 工具: yapi_get_interface_detail
-参数: id = "13955"
+参数: https://xxxxxxx/project/1219/interface/api/42726
 ```
 
 ## 📖 使用流程
 
 1. **获取接口列表**: 使用 `yapi_get_interfaces` 获取分类下的所有接口
-2. **复制接口 ID**: 从返回结果中找到需要的接口，复制其 `_id`
-3. **获取接口详情**: 使用 `yapi_get_interface_detail` 获取详细信息
-4. **生成类型定义**: 基于返回的请求/响应体生成 TypeScript 类型
+2. **获取接口详情**: 使用 `yapi_get_interface_detail` 获取详细信息
+3. **生成类型定义**: 基于返回的请求/响应体生成 TypeScript 类型
+   ![yapi-mcp](http://static.markweb.top/static/mcp-3.jpg)
 
 ## 🔗 资源
 
