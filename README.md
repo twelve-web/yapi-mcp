@@ -43,9 +43,9 @@ npm 官方源
 ```json
 {
   "mcpServers": {
-    "Ypai-MCP": {
+    "auto-yapi-mcp": {
       "command": "npx",
-      "args": ["-y", "yapi-mcp"],
+      "args": ["-y", "auto-yapi-mcp"],
       "env": {
         "YAPI_TOKEN": "aa270a5a35f043540xxxxxxx5c908164f6fcae",
         "BASE_URL": "https://fed.xxxx.com"
