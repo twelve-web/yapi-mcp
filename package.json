@@ -1,6 +1,6 @@
 {
   "name": "auto-yapi-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "yapi-mcp - YApi接口信息获取工具，支持MCP协议",
   "main": "dist/index.js",
   "type": "module",

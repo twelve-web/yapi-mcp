@@ -25,6 +25,7 @@ npm run build
 ```env
 YAPI_TOKEN=""
 BASE_URL=""
+YAPI_COOKIE=""  # 可选，用于需要Cookie认证的场景
 ```
 
 ## 版本
@@ -48,12 +49,19 @@ npm 官方源
       "args": ["-y", "auto-yapi-mcp"],
       "env": {
         "YAPI_TOKEN": "aa270a5a35f043540xxxxxxx5c908164f6fcae",
-        "BASE_URL": "https://fed.xxxx.com"
+        "BASE_URL": "https://fed.xxxx.com",
+        "YAPI_COOKIE": "your_cookie_value_here"
       }
     }
   }
 }
 ```
+
+**环境变量说明:**
+
+- `YAPI_TOKEN`: YApi 的访问令牌（必填）
+- `BASE_URL`: YApi 服务的基础 URL（必填）
+- `YAPI_COOKIE`: 用于请求鉴权的 Cookie 值（可选，某些 YApi 实例可能需要）
 
 ## 📸 参数获取方式
 

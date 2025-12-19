@@ -53,9 +53,17 @@ server.tool(
 
       // 2. 构建API请求URL
       const apiUrl = `${process.env.BASE_URL}/api/interface/list_cat?token=${process.env.YAPI_TOKEN}&catid=${catId}&page=1&limit=100`;
-      // 3. 发起请求
+      
+      // 3. 构建请求头
+      const headers: Record<string, string> = {};
+      if (process.env.YAPI_COOKIE) {
+        headers['Cookie'] = process.env.YAPI_COOKIE;
+      }
+      
+      // 4. 发起请求
       const response = await fetch(apiUrl, {
         method: "GET",
+        headers,
       });
 
       if (!response.ok) {
@@ -143,9 +151,16 @@ server.tool(
       // 1. 构建详情API请求URL
       const apiUrl = `${process.env.BASE_URL}/api/interface/get?token=${process.env.YAPI_TOKEN}&id=${id}`;
 
+      // 2. 构建请求头
+      const headers: Record<string, string> = {};
+      if (process.env.YAPI_COOKIE) {
+        headers['Cookie'] = process.env.YAPI_COOKIE;
+      }
+
       // 3. 发起请求
       const response = await fetch(apiUrl, {
         method: "GET",
+        headers,
       });
 
       if (!response.ok) {
