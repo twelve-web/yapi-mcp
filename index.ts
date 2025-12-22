@@ -3,6 +3,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import fetch from "node-fetch";
 
 const server = new McpServer({
   name: "auto-api-mcp",
@@ -53,13 +54,13 @@ server.tool(
 
       // 2. 构建API请求URL
       const apiUrl = `${process.env.BASE_URL}/api/interface/list_cat?token=${process.env.YAPI_TOKEN}&catid=${catId}&page=1&limit=100`;
-      
+
       // 3. 构建请求头
       const headers: Record<string, string> = {};
       if (process.env.YAPI_COOKIE) {
-        headers['Cookie'] = process.env.YAPI_COOKIE;
+        headers["Cookie"] = process.env.YAPI_COOKIE;
       }
-      
+
       // 4. 发起请求
       const response = await fetch(apiUrl, {
         method: "GET",
@@ -77,7 +78,7 @@ server.tool(
         };
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as any;
       // 5. 格式化返回结果
       if (data.errcode !== 0) {
         return {
@@ -154,7 +155,7 @@ server.tool(
       // 2. 构建请求头
       const headers: Record<string, string> = {};
       if (process.env.YAPI_COOKIE) {
-        headers['Cookie'] = process.env.YAPI_COOKIE;
+        headers["Cookie"] = process.env.YAPI_COOKIE;
       }
 
       // 3. 发起请求
@@ -174,7 +175,7 @@ server.tool(
         };
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as any;
 
       // 4. 格式化返回结果
       if (data.errcode !== 0) {

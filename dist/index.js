@@ -2,6 +2,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import fetch from "node-fetch";
 const server = new McpServer({
     name: "auto-api-mcp",
     version: "1.0.0",
@@ -44,7 +45,7 @@ server.tool("yapi_get_interfaces", {
         // 3. 构建请求头
         const headers = {};
         if (process.env.YAPI_COOKIE) {
-            headers['Cookie'] = process.env.YAPI_COOKIE;
+            headers["Cookie"] = process.env.YAPI_COOKIE;
         }
         // 4. 发起请求
         const response = await fetch(apiUrl, {
@@ -61,7 +62,7 @@ server.tool("yapi_get_interfaces", {
                 ],
             };
         }
-        const data = await response.json();
+        const data = (await response.json());
         // 5. 格式化返回结果
         if (data.errcode !== 0) {
             return {
@@ -124,7 +125,7 @@ server.tool("yapi_get_interface_detail", {
         // 2. 构建请求头
         const headers = {};
         if (process.env.YAPI_COOKIE) {
-            headers['Cookie'] = process.env.YAPI_COOKIE;
+            headers["Cookie"] = process.env.YAPI_COOKIE;
         }
         // 3. 发起请求
         const response = await fetch(apiUrl, {
@@ -141,7 +142,7 @@ server.tool("yapi_get_interface_detail", {
                 ],
             };
         }
-        const data = await response.json();
+        const data = (await response.json());
         // 4. 格式化返回结果
         if (data.errcode !== 0) {
             return {
